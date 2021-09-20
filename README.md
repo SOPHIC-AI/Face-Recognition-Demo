@@ -1,6 +1,6 @@
 ## Face-Recognition-Demo
 
-#Run demo
+# Run demo
 ```shell
 python3 demo.py
 ```
