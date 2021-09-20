@@ -11,7 +11,6 @@ from mobilefacenet import MobileFaceNet
 # onnx runtime
 import onnxruntime as ort
 
-
 class FaceRecognition(object):
 
     def __init__(self):
