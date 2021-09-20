@@ -6,7 +6,7 @@ import detect_imgs
 class GetImage(object):
     def __init__(self) -> None:
         super().__init__()
-        self.image_dir = 'images'
+        self.image_dir = 'face_bank/imgs'
 
     def run(self,cap,name):
         done = 0
