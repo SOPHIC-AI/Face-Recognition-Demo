@@ -56,7 +56,6 @@ predictor = create_Mb_Tiny_RFB_fd_predictor(net, candidate_size=1500, device=tes
 face_bank = 'face_bank'
 net.load(model_path)
 
-
 def run(img_path,name):    
     orig_image = cv2.imread(img_path)
     image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
