@@ -187,12 +187,6 @@ class Ui_MainWindow(QWidget):
             self.RegisterFrame.hide()
 
     def register_button(self):
-        # self.i += 1
-        # if self.i % 2 == 0:
-        #     self.thread_1.restart()
-        #     self.thread_1.start()
-            
-        # else:
         self.thread_1.stop()
         self.RegisterFrame.show()
 

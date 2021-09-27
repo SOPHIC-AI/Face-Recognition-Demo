@@ -5,7 +5,7 @@ import torch
 import numpy as np
 from mobilefacenet import MobileFaceNet
 import cv2
-
+import os
 from vision.ssd.config.fd_config import define_img_size
 
 define_img_size(320)  # must put define_img_size() before 'import create_mb_tiny_fd, create_mb_tiny_fd_predictor'
@@ -57,23 +57,26 @@ face_bank = 'face_bank'
 net.load(model_path)
 
 
-def run(img_path,name):    
-    orig_image = cv2.imread(img_path)
-    image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
-    boxes, _, _ = predictor.predict(image, 1500 / 2, 0.7)
-    box = boxes[0, :]
-    faces = orig_image[int(box[1]):int(box[3]),int(box[0]):int(box[2])]
-    cv2.imwrite('face_bank/imgs/'+'%s.jpg'%name,faces)
-    faces = preprocess_img(faces)
-    with torch.no_grad():
-        faces = faces.to(device)
-        embedding_features = mbf(faces)
-        embedding_features = embedding_features.squeeze()
-        embedding_features = embedding_features.data.cpu().numpy()
-        normalized_features = feature_normalization(embedding_features)
-        with open('face_bank/features'+'/%s.txt'%name,'w') as f:
-            np.savetxt(f, normalized_features)
-
-# if __name__ == "__main__":
-#     img_path = 'images/thinh.jpg'
-#     run(img_path)
+def run(img_dir,name):    
+    list_img = os.listdir(img_dir)
+    features = []
+    for img in list_img:
+        img_path = os.path.join(img_dir,img)    
+        orig_image = cv2.imread(img_path)
+        image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
+        boxes, _, _ = predictor.predict(image, 1500 / 2, 0.7)
+        box = boxes[0, :]
+        faces = orig_image[int(box[1]):int(box[3]),int(box[0]):int(box[2])]
+        cv2.imwrite(img_path,faces)
+        faces = preprocess_img(faces)
+        with torch.no_grad():
+            faces = faces.to(device)
+            embedding_features = mbf(faces)
+            embedding_features = embedding_features.squeeze()
+            embedding_features = embedding_features.data.cpu().numpy()
+            normalized_features = feature_normalization(embedding_features)
+            features.append(normalized_features)
+    # import ipdb; ipdb.set_trace()
+    mean_features = np.mean(features,axis=0)
+    with open('face_bank/features'+'/%s.txt'%name,'w') as f:
+        np.savetxt(f, mean_features)
