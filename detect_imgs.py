@@ -56,6 +56,7 @@ predictor = create_Mb_Tiny_RFB_fd_predictor(net, candidate_size=1500, device=tes
 face_bank = 'face_bank'
 net.load(model_path)
 
+<<<<<<< HEAD
 
 def run(img_dir,name):    
     list_img = os.listdir(img_dir)
@@ -80,3 +81,25 @@ def run(img_dir,name):
     mean_features = np.mean(features,axis=0)
     with open('face_bank/features'+'/%s.txt'%name,'w') as f:
         np.savetxt(f, mean_features)
+=======
+def run(img_path,name):    
+    orig_image = cv2.imread(img_path)
+    image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
+    boxes, _, _ = predictor.predict(image, 1500 / 2, 0.7)
+    box = boxes[0, :]
+    faces = orig_image[int(box[1]):int(box[3]),int(box[0]):int(box[2])]
+    cv2.imwrite('face_bank/imgs/'+'%s.jpg'%name,faces)
+    faces = preprocess_img(faces)
+    with torch.no_grad():
+        faces = faces.to(device)
+        embedding_features = mbf(faces)
+        embedding_features = embedding_features.squeeze()
+        embedding_features = embedding_features.data.cpu().numpy()
+        normalized_features = feature_normalization(embedding_features)
+        with open('face_bank/features'+'/%s.txt'%name,'w') as f:
+            np.savetxt(f, normalized_features)
+
+# if __name__ == "__main__":
+#     img_path = 'images/thinh.jpg'
+#     run(img_path)
+>>>>>>> b0abe22441dea7ac3d207681263957a6c708ee14

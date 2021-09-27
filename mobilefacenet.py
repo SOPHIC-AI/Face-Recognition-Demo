@@ -125,6 +125,5 @@ class MobileFaceNet(Module):
         x = self.features(x)
         return x
 
-
 def get_mbf(fp16, num_features):
     return MobileFaceNet(fp16, num_features)

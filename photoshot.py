@@ -6,7 +6,10 @@ class GetImage(object):
     def __init__(self) -> None:
         super().__init__()
         self.image_dir = 'face_bank/imgs'
+<<<<<<< HEAD
         self.i = 0
+=======
+>>>>>>> b0abe22441dea7ac3d207681263957a6c708ee14
 
     def run(self,cap,name):
         if not os.path.exists(os.path.join(self.image_dir,name)):
@@ -23,4 +26,12 @@ class GetImage(object):
         if self.i == 5:
             detect_imgs.run(self.image_dir + '/%s'%name, name)
             done = 1
+<<<<<<< HEAD
         return done
+=======
+        return done
+
+# if __name__ == "__main__":
+#     name = input('Enter your name: ')
+#     photoshot(name)
+>>>>>>> b0abe22441dea7ac3d207681263957a6c708ee14
